@@ -77,7 +77,7 @@ export function HostApp() {
       <TopBar center={center}>
         <RoomBadge local={local} room={room} status={status} state={state} />
         {state.phase === 'play' && (
-          <Button variant="outline" size="icon" aria-label="إنهاء المعركة" title="إنهاء المعركة" onClick={() => confirm('إنهاء المعركة وإعلان النتيجة؟') && send({ type: 'end' })}><Flag /></Button>
+          <EndGameButton state={state} send={send} />
         )}
       </TopBar>
       <main className="relative z-10 flex min-h-0 flex-1 flex-col gap-3 p-3 lg:p-4">
@@ -92,6 +92,42 @@ export function HostApp() {
       </main>
       <StrikeReveal state={state} />
     </div>
+  );
+}
+
+/** زر إنهاء المعركة مع نافذة تأكيد تعرض الترتيب الحالي */
+function EndGameButton({ state, send }: { state: GameState; send: Send }) {
+  const [open, setOpen] = useState(false);
+  const ranked = [...state.teams].sort((a, b) => b.score - a.score);
+  return (
+    <>
+      <Button variant="outline" onClick={() => setOpen(true)} data-testid="end-game"
+        className="h-10 gap-1.5 rounded-full border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive">
+        <Flag /> إنهاء اللعبة
+      </Button>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-display text-3xl">إنهاء المعركة الآن؟</DialogTitle>
+            <DialogDescription>تتوقف الجولات وتُعلن النتيجة على الشاشة وفي جوالات الفرق، وتنكشف كل الحصون.</DialogDescription>
+          </DialogHeader>
+          <ol className="flex flex-col gap-1.5">
+            {ranked.map((t, i) => (
+              <li key={t.id} className="flex items-center gap-3 rounded-xl border bg-background/50 px-3 py-2">
+                <span className="w-6 text-center font-display text-xl text-muted-foreground">{i === 0 && t.score > 0 && t.score > (ranked[1]?.score ?? -Infinity) ? '👑' : ar(i + 1)}</span>
+                <span className="size-3 rounded-full" style={{ background: t.color }} />
+                <b className="flex-1">{t.name}</b>
+                <b className="tabular text-lg">{ar(t.score)}</b>
+              </li>
+            ))}
+          </ol>
+          <div className="flex justify-end gap-2 pt-1">
+            <Button variant="ghost" onClick={() => setOpen(false)}>متابعة اللعب</Button>
+            <Button variant="destructive" onClick={() => { setOpen(false); send({ type: 'end' }); }} data-testid="confirm-end"><Flag /> إنهاء وإعلان النتيجة</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 

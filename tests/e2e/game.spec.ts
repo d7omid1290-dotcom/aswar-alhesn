@@ -47,6 +47,16 @@ test('مباراة كاملة: المقدم وجوال فريق وضربة وس�
   // الفريق لا يستطيع إنهاء اللعبة
   const forbidden = await phone.evaluate(async ([r, k]) => (await fetch(`/api/rooms/${r}/action`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-room-key': k }, body: JSON.stringify({ action: { type: 'end' } }) })).status, [room, join]);
   expect(forbidden).toBe(400);
+
+  // المقدم ينهي اللعبة من الزر بعد التأكيد
+  await expect(host.getByTestId('strike-reveal')).toBeHidden({ timeout: 8000 });
+  await host.getByTestId('end-game').click();
+  await host.getByRole('button', { name: 'متابعة اللعب' }).click();
+  await expect(host.getByTestId('winner')).toBeHidden();
+  await host.getByTestId('end-game').click();
+  await host.getByTestId('confirm-end').click();
+  await expect(host.getByTestId('winner')).toHaveText('الفائز: الصقور');
+  await expect(phone.getByText('مبروك! فزتم بالمعركة')).toBeVisible();
 });
 
 test('وضع الشاشة الواحدة يعمل بلا خادم غرف', async ({ page }) => {
