@@ -2,6 +2,7 @@
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { MonitorPlay, MonitorSmartphone, Smartphone } from 'lucide-react';
+import { asset } from '@/lib/utils';
 import { ElementIcon } from './element-icon';
 import { TopBar } from './top-bar';
 
@@ -23,7 +24,7 @@ export function Landing() {
       <TopBar />
       <main className="relative z-10 mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col justify-center gap-[3vh] px-4 py-4">
         <section className="text-center">
-          <motion.img src="/assets/logo.svg" alt="" className="mx-auto size-[clamp(72px,13vh,128px)] rounded-[28%] shadow-2xl"
+          <motion.img src={asset('/assets/logo.svg')} alt="" className="mx-auto size-[clamp(72px,13vh,128px)] rounded-[28%] shadow-2xl"
             initial={{ scale: 0.6, rotate: -10, opacity: 0 }} animate={{ scale: 1, rotate: 0, opacity: 1 }} transition={{ type: 'spring', stiffness: 160, damping: 12 }} />
           <motion.h1 initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.15 }}
             className="mt-3 font-display text-[clamp(2.6rem,8vh,5.5rem)] leading-none text-gold drop-shadow">أسوار الحصن</motion.h1>

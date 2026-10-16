@@ -1,5 +1,6 @@
 'use client';
 import { Howl, Howler } from 'howler';
+import { asset } from '@/lib/utils';
 
 const NAMES = ['launch', 'boom', 'coin', 'fanfare', 'fail', 'thud', 'tick', 'click', 'correct'] as const;
 export type Sfx = (typeof NAMES)[number];
@@ -11,7 +12,7 @@ function load() {
   if (typeof window === 'undefined' || Object.keys(bank).length) return;
   try { muted = localStorage.getItem('aswar-muted') === '1'; } catch {}
   Howler.mute(muted);
-  bank = Object.fromEntries(NAMES.map((n) => [n, new Howl({ src: [`/sfx/${n}.wav`], volume: n === 'tick' || n === 'click' ? 0.35 : 0.8, preload: true })]));
+  bank = Object.fromEntries(NAMES.map((n) => [n, new Howl({ src: [asset(`/sfx/${n}.wav`)], volume: n === 'tick' || n === 'click' ? 0.35 : 0.8, preload: true })]));
 }
 
 /** تشغيل مؤثر صوتي عبر Howler */

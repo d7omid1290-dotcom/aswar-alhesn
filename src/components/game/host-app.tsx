@@ -17,7 +17,7 @@ import { LEVEL_MULT, LEVELS, MAX_TEAMS, counts, cellCount, teamById, validLayout
 import { CATEGORIES, QUESTIONS } from '@/lib/game/questions';
 import type { Action, GameState, Level, Team } from '@/lib/game/types';
 import { play } from '@/lib/sfx';
-import { ar, cn } from '@/lib/utils';
+import { ar, asset, cn, STATIC_PREVIEW } from '@/lib/utils';
 import { Battlefield } from './battlefield';
 import { boardFrom } from './board';
 import { burst } from './confetti';
@@ -38,7 +38,7 @@ export function HostApp() {
   const [room, setRoom] = useState<{ code: string; hostKey: string } | null>(null);
 
   useEffect(() => {
-    if (params.get('local') === '1') { setTarget({ mode: 'local' }); return; }
+    if (params.get('local') === '1' || STATIC_PREVIEW) { setTarget({ mode: 'local' }); return; }
     (async () => {
       let saved: { code: string; hostKey: string } | null = null;
       try { saved = JSON.parse(localStorage.getItem(HOST_KEY) || 'null'); } catch {}
@@ -98,7 +98,7 @@ export function HostApp() {
 function Splash() {
   return (
     <div className="desert-bg grid h-dvh place-items-center">
-      <motion.img src="/assets/logo.svg" alt="" className="size-28 rounded-3xl" animate={{ scale: [1, 1.06, 1] }} transition={{ repeat: Infinity, duration: 1.4 }} />
+      <motion.img src={asset('/assets/logo.svg')} alt="" className="size-28 rounded-3xl" animate={{ scale: [1, 1.06, 1] }} transition={{ repeat: Infinity, duration: 1.4 }} />
     </div>
   );
 }

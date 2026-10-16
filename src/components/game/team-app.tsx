@@ -13,7 +13,7 @@ import { useRoom, type Target } from '@/lib/client/use-room';
 import { LEVELS, remainingTargets, teamById } from '@/lib/game/engine';
 import type { GameState, Team } from '@/lib/game/types';
 import { play, vibrate } from '@/lib/sfx';
-import { ar, cn } from '@/lib/utils';
+import { ar, asset, cn } from '@/lib/utils';
 import { Battlefield } from './battlefield';
 import { boardFrom } from './board';
 import { burst } from './confetti';
@@ -78,7 +78,7 @@ function TeamRoom({ target, onLeave }: { target: Target; onLeave: () => void }) 
   const { state, me, status, send } = useRoom(target);
   const team = state && me?.role === 'team' ? teamById(state, me.teamId) : null;
   useEffect(() => { if (status === 'denied') onLeave(); }, [status, onLeave]);
-  if (!state || !team) return <div className="desert-bg grid h-dvh place-items-center"><motion.img src="/assets/logo.svg" className="size-24 rounded-3xl" animate={{ scale: [1, 1.08, 1] }} transition={{ repeat: Infinity, duration: 1.4 }} /></div>;
+  if (!state || !team) return <div className="desert-bg grid h-dvh place-items-center"><motion.img src={asset('/assets/logo.svg')} className="size-24 rounded-3xl" animate={{ scale: [1, 1.08, 1] }} transition={{ repeat: Infinity, duration: 1.4 }} /></div>;
   return (
     <div className="desert-bg flex h-dvh flex-col" style={{ ['--tc' as string]: team.color }}>
       <TopBar compact center={<span className="font-display text-xl" style={{ color: team.color }}>🚩 {team.name}</span>}>

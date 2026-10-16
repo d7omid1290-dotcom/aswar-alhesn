@@ -3,6 +3,7 @@
  * ومؤثرات الضربة (قذيفة بمسار قوسي، انفجار جزيئات، اهتزاز الكاميرا).
  */
 import Phaser from 'phaser';
+import { asset } from '@/lib/utils';
 
 export const ELEMENT_IDS = ['king', 'knight', 'cannon', 'guard', 'market', 'trap', 'empty'] as const;
 const TW = 128, TH = 64;
@@ -53,11 +54,11 @@ export class BattlefieldScene extends Phaser.Scene {
   constructor() { super('battlefield'); }
 
   preload() {
-    for (const id of ELEMENT_IDS) this.load.svg(`el-${id}`, `/assets/${id}.svg`, { width: 128, height: 128 });
-    this.load.svg('tile', '/assets/tile.svg', { width: 128, height: 84 });
-    this.load.svg('tile-hit', '/assets/tile-hit.svg', { width: 128, height: 84 });
-    this.load.svg('tower', '/assets/tower.svg', { width: 80, height: 150 });
-    this.load.svg('flag', '/assets/flag.svg', { width: 40, height: 26 });
+    for (const id of ELEMENT_IDS) this.load.svg(`el-${id}`, asset(`/assets/${id}.svg`), { width: 128, height: 128 });
+    this.load.svg('tile', asset('/assets/tile.svg'), { width: 128, height: 84 });
+    this.load.svg('tile-hit', asset('/assets/tile-hit.svg'), { width: 128, height: 84 });
+    this.load.svg('tower', asset('/assets/tower.svg'), { width: 80, height: 150 });
+    this.load.svg('flag', asset('/assets/flag.svg'), { width: 40, height: 26 });
   }
 
   create() {
