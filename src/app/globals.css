@@ -1,0 +1,131 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* هوية صحراوية عربية: رملي، ذهبي، بني — متغيرات shadcn */
+:root {
+  --radius: 0.9rem;
+  --background: oklch(0.955 0.025 82);
+  --foreground: oklch(0.27 0.04 55);
+  --card: oklch(0.985 0.015 85);
+  --card-foreground: oklch(0.27 0.04 55);
+  --popover: oklch(0.985 0.015 85);
+  --popover-foreground: oklch(0.27 0.04 55);
+  --primary: oklch(0.72 0.15 75);
+  --primary-foreground: oklch(0.22 0.04 60);
+  --secondary: oklch(0.915 0.035 80);
+  --secondary-foreground: oklch(0.32 0.05 55);
+  --muted: oklch(0.92 0.03 80);
+  --muted-foreground: oklch(0.5 0.05 60);
+  --accent: oklch(0.88 0.06 78);
+  --accent-foreground: oklch(0.3 0.05 55);
+  --destructive: oklch(0.55 0.2 28);
+  --success: oklch(0.55 0.14 150);
+  --border: oklch(0.85 0.04 75);
+  --input: oklch(0.86 0.04 75);
+  --ring: oklch(0.72 0.15 75);
+  --gold: oklch(0.72 0.15 75);
+  --sand: oklch(0.86 0.06 80);
+  --dune: oklch(0.7 0.09 65);
+  --sky-a: oklch(0.93 0.04 70);
+  --sky-b: oklch(0.88 0.07 60);
+}
+
+.dark {
+  --background: oklch(0.17 0.02 60);
+  --foreground: oklch(0.94 0.02 85);
+  --card: oklch(0.22 0.025 60);
+  --card-foreground: oklch(0.94 0.02 85);
+  --popover: oklch(0.22 0.025 60);
+  --popover-foreground: oklch(0.94 0.02 85);
+  --primary: oklch(0.8 0.14 80);
+  --primary-foreground: oklch(0.2 0.03 60);
+  --secondary: oklch(0.28 0.03 60);
+  --secondary-foreground: oklch(0.92 0.02 85);
+  --muted: oklch(0.27 0.025 60);
+  --muted-foreground: oklch(0.72 0.03 75);
+  --accent: oklch(0.32 0.04 65);
+  --accent-foreground: oklch(0.94 0.02 85);
+  --destructive: oklch(0.65 0.2 28);
+  --success: oklch(0.72 0.16 150);
+  --border: oklch(0.33 0.03 60);
+  --input: oklch(0.35 0.03 60);
+  --ring: oklch(0.8 0.14 80);
+  --gold: oklch(0.82 0.14 82);
+  --sand: oklch(0.42 0.06 65);
+  --dune: oklch(0.32 0.05 60);
+  --sky-a: oklch(0.2 0.03 270);
+  --sky-b: oklch(0.17 0.02 60);
+}
+
+@theme inline {
+  --font-sans: var(--font-body), system-ui, sans-serif;
+  --font-display: var(--font-title), var(--font-body), serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-gold: var(--gold);
+  --color-sand: var(--sand);
+  --color-dune: var(--dune);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  button { cursor: pointer; }
+}
+
+/* خلفية الصحراء: سماء + كثبان */
+.desert-bg {
+  background:
+    radial-gradient(60% 50% at 85% 0%, color-mix(in oklch, var(--gold) 22%, transparent), transparent 70%),
+    linear-gradient(to bottom, var(--sky-a), var(--sky-b) 65%);
+  position: relative;
+}
+.desert-bg::after {
+  content: ''; position: absolute; inset: auto 0 0 0; height: 32%; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(120% 90% at 20% 110%, var(--dune) 40%, transparent 41%),
+    radial-gradient(110% 80% at 85% 115%, color-mix(in oklch, var(--dune) 80%, var(--sand)) 42%, transparent 43%);
+  opacity: .55;
+}
+.dark .desert-bg::before {
+  content: ''; position: absolute; inset: 0 0 45% 0; pointer-events: none;
+  background-image: radial-gradient(1.5px 1.5px at 12% 18%, #fff8 50%, transparent 51%), radial-gradient(1px 1px at 32% 8%, #fff7 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 58% 22%, #fff6 50%, transparent 51%), radial-gradient(1px 1px at 72% 12%, #fff8 50%, transparent 51%),
+    radial-gradient(1.4px 1.4px at 44% 30%, #fff5 50%, transparent 51%), radial-gradient(1px 1px at 22% 36%, #fff6 50%, transparent 51%);
+}
+
+/* زخرفة نجمة ثمانية خفيفة للبطاقات */
+.pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M24 6l5 13 13 5-13 5-5 13-5-13-13-5 13-5z' fill='none' stroke='%23b8862b' stroke-opacity='.10' stroke-width='1.2'/%3E%3C/svg%3E");
+}
+.text-stroke { -webkit-text-stroke: 1px color-mix(in oklch, var(--foreground) 25%, transparent); }
+.tabular { font-variant-numeric: tabular-nums; }
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
