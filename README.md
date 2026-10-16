@@ -47,19 +47,22 @@ npm run dev          # http://localhost:3000
 ## تفعيل Supabase
 
 1. أنشئ مشروعًا في Supabase.
-2. من SQL Editor شغّل `supabase/migrations/0001_init.sql` ثم `supabase/seed.sql` (٧٤ سؤالًا أوليًا).
+2. من SQL Editor شغّل `supabase/migrations/0001_init.sql` و`0002_server_rpc.sql` ثم `supabase/seed.sql` (٧٤ سؤالًا أوليًا).
 3. من Realtime › Settings تأكد أن القنوات العامة مسموحة (الإشعارات لا تحمل بيانات سرية).
 4. انسخ `.env.example` إلى `.env.local` واملأ:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `SUPABASE_SERVICE_ROLE_KEY` (سري: على الخادم فقط)
+   - إما `SUPABASE_SERVICE_ROLE_KEY` (سري: على الخادم فقط)
+   - أو `SUPABASE_DB_SECRET`: نص عشوائي طويل تحفظه أيضًا في القاعدة:
+     `insert into private.config values ('server_secret', '...');`
+     بهذا يعمل الخادم بالمفتاح العام عبر دوال `aswar_*` المحمية بالسر، والجداول تبقى مقفلة.
 
 الأسئلة تُقرأ من جدول `questions` (عمود `active` لإخفاء سؤال)، والنتائج تُحفظ في `results` عند نهاية كل معركة.
 
 ## النشر على Vercel
 
 1. ارفع المستودع إلى GitHub واستورده في Vercel.
-2. أضف متغيرات Supabase الثلاثة في إعدادات المشروع. **مطلوبة على Vercel** لأن دوال Vercel لا تحتفظ بالذاكرة بين الطلبات.
+2. أضف متغيرات Supabase في إعدادات المشروع. **مطلوبة على Vercel** لأن دوال Vercel لا تحتفظ بالذاكرة بين الطلبات.
 3. Deploy.
 
 بديل بلا Supabase: أي استضافة تشغّل `npm run build && npm start` كخادم واحد دائم (Render أو Railway أو Fly.io).
