@@ -2,7 +2,6 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowLeft, ArrowRight, Dices, Eye, Flag, Lock, MonitorSmartphone, Plus, RefreshCw, RotateCcw, Settings2, Swords, Trash2, Trophy, X } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import QRCode from 'qrcode';
 import { useEffect, useMemo, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -22,6 +21,7 @@ import { Battlefield } from './battlefield';
 import { boardFrom } from './board';
 import { burst } from './confetti';
 import { ElementIcon } from './element-icon';
+import { JoinQr } from './join-qr';
 import { LayoutEditor } from './layout-editor';
 import { QuestionTimer } from './question-timer';
 import { StrikeReveal } from './strike-reveal';
@@ -124,21 +124,11 @@ function RoomBadge({ local, room, status, state }: { local: boolean; room: { cod
   );
 }
 
-function joinUrl(code: string, t: Team) { return `${location.origin}/play?room=${code}&code=${t.joinCode}`; }
-
-function Qr({ text, className }: { text: string; className?: string }) {
-  const [src, setSrc] = useState('');
-  useEffect(() => { QRCode.toDataURL(text, { margin: 1, width: 360, color: { dark: '#2a1d11', light: '#fffaf0' } }).then(setSrc); }, [text]);
-  // eslint-disable-next-line @next/next/no-img-element
-  return src ? <img src={src} alt="رمز QR" className={cn('aspect-square rounded-xl', className)} /> : <div className={cn('aspect-square rounded-xl bg-muted', className)} />;
-}
-
 function JoinCard({ team, code }: { team: Team; code: string }) {
   return (
-    <div className="flex flex-col items-center gap-2 rounded-2xl border p-3" style={{ borderTop: `5px solid ${team.color}` }}>
+    <div className="flex h-72 flex-col items-center gap-2 rounded-2xl border p-3" style={{ borderTop: `5px solid ${team.color}` }}>
       <b className="font-display text-xl" style={{ color: team.color }}>{team.name}</b>
-      <Qr text={joinUrl(code, team)} className="w-full max-w-40" />
-      <span className="font-mono text-lg font-bold tracking-[0.3em] text-gold">{team.joinCode}</span>
+      <JoinQr team={team} room={code} compact />
     </div>
   );
 }
@@ -317,11 +307,7 @@ function Setup({ state, send, local, room }: { state: GameState; send: Send; loc
                 </div>
                 <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center gap-1">
                   {!local && room ? (
-                    <>
-                      <Qr text={joinUrl(room.code, t)} className="max-h-full min-h-0 w-auto max-w-44 flex-1" />
-                      <span className="text-xs text-muted-foreground">امسح بالجوال أو أدخل الغرفة <b>{room.code}</b> والرمز</span>
-                      <span className="font-mono text-xl font-bold tracking-[0.3em] text-gold" data-testid="join-code">{t.joinCode}</span>
-                    </>
+                    <JoinQr team={t} room={room.code} compact={k > 3} />
                   ) : (
                     <motion.div animate={t.ready ? { rotate: [0, -6, 6, 0] } : {}} className="grid size-28 place-items-center rounded-3xl bg-muted">
                       {t.ready ? <ElementIcon id="king" className="size-20" /> : <Lock className="size-12 text-muted-foreground" />}
